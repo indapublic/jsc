@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>JavaScript Calendar, Datepicker and Taplendar</title>
+        <link rel="stylesheet" type="text/css" href="jsc.css" />
+        <script type="text/javascript" src="jsc.js"></script>
+    </head>
+    <body>
+        <!--
+        <p>
+            <div id="calendar-container" class="jsc-calendar-container"></div>
+        </p>
+        <p>
+            <input id="input-date" name="input-date" value="28.11.1983" readonly>
+            <div id="datepicker-container" class="jsc-datepicker-container"></div>
+        </p>
+        -->
+        <p>
+            <button onclick="taplendar.setMode('include'); console.log('current mode: ' + taplendar.getMode());">"Include" mode</button>
+            <button onclick="taplendar.setMode('exclude'); console.log('current mode: ' + taplendar.getMode());">"Exclude" mode</button>
+            <button onclick="taplendar.setMode('clear'); console.log('current mode: ' + taplendar.getMode());">"Clear" mode</button>
+            <button onclick="taplendar.includes('D.M.Y');">Includes array</button>
+            <button onclick="taplendar.excludes();">Excludes array</button>
+            <button onclick="taplendar.clear(true);">Clear and refresh</button>
+        </p>
+        <p>
+            <div id="taplendar-container" class="jsc-calendar-container"></div>
+        </p>
+    </body>
+
+    <script type="text/javascript">
+        function eventCalendarCellClick(cell, mouseEvent) {
+            console.log(
+                "CalendarCellClick" +
+                "\ndate: " + cell.getDate() +
+                "\nscope: " + cell.inScope +
+                "\nlocked: " + cell.locked +
+                "\ncurrent: " + cell.current
+            );
+        }
+
+        function eventDatepickerCellClick(cell, mouseEvent) {
+            console.log(
+                "DatepickerCellClick"
+            );
+        }
+
+        function eventRequest() {
+            return (confirm('Заменить область?')) ? rmReplace : rmDenied;
+        }
+
+        function eventRangeSelect(mode, startId, stopId, isOverwrite) {
+            console.log("RangeSelect" +
+                "\nmode: " + mode +
+                "\nstartId: " + startId + 
+                "\nstopId: " + stopId +
+                "\nisOverwrite: " + isOverwrite
+            );
+        }
+
+        var
+            dataDisabledDays = [
+            '21.10.2012',
+            '08.11.2012'
+            ],
+
+            /*
+            calendar = new Calendar({
+                container: $('calendar-container'),     //  контейнер
+                currentDate: '25.10.2012',              //  текущая дата (выделяется цветом, может быть не задана)
+                startDate: '20.10.2012',                //  дата показа (отсчет с первого числа месяца, не может быть не задана)
+                arrayDisabledWeekDays: '0010000',       //  массив заблокированных дней недели
+                arrayDisabledDays: dataDisabledDays,    //  массив заблокированных дат
+                languageIndex: liRUS,                   //  язык интерфейса
+                count: 1,                               //  количество месяцев для показа
+                alpha: 1,                               //  количество месяцев для переходов
+                onCellClick: eventCalendarCellClick,    //  обработчик клика
+                showPrior: true,                        //  признак "показывать перелистывание назад"
+                showNext: true                          //  признак "показывать перелистывание вперед"
+
+            }),
+
+            datepicker = new Datepicker({
+                container: $('datepicker-container'),   //  контейнер
+                control: $('input-date'),               //  контрол
+                arrayDisabledWeekDays: '0010000',       //  массив заблокированных дней недели
+                arrayDisabledDays: dataDisabledDays,    //  массив заблокированных дат
+                languageIndex: liRUS,                   //  язык интерфейса
+                count: 1,                               //  количество месяцев для показа
+                alpha: 1,                               //  количество месяцев для переходов
+                onCellClick: eventDatepickerCellClick,  //  обработчик клика
+                showPrior: true,                        //  признак "показывать перелистывание назад"
+                showNext: true                          //  признак "показывать перелистывание вперед"
+            }),
+            */
+
+            range1 = [
+            '27.10.2012',
+            '31.10.2012'
+            ],
+
+            range2 = [
+            '09.12.2012',
+            '15.12.2012'
+            ],
+
+            range3 = [
+            '11.12.2012',
+            '13.12.2012'
+            ],
+
+            range4 = [
+            41186,
+            41200
+            ],
+
+            range5 = [
+            41198,
+            41207
+            ],
+
+            includesDays = [range1, range2, range4, range5],
+            excludesDays = [range3],
+
+            taplendar = new Taplendar({
+                container: $('taplendar-container'),    //  контейнер
+                currentDate: '01.01.2013',              //  текущая дата (выделяется цветом, может быть не задана)
+                startDate: '20.10.2012',                //  дата показа (отсчет с первого числа месяца, не может быть не задана)
+                arrayDisabledWeekDays: '0010000',       //  массив заблокированных дней недели
+                arrayDisabledDays: dataDisabledDays,    //  массив заблокированных дат
+                languageIndex: liENG,                   //  язык интерфейса
+                count: 3,                               //  количество месяцев для показа
+                alpha: 2,                               //  количество месяцев для переходов
+                showPrior: true,                        //  признак "показывать перелистывание назад"
+                showNext: true,                         //  признак "показывать перелистывание вперед"
+                mode: 'include',                        //  начальный режим
+                reselectMode: rmRequest,                //  режим замены областей
+                onRangeExistsRequest: eventRequest,     //  обработчик на совмещение диапазонов
+                arrayIncludeDays: includesDays,         //  массив дат "включений"
+                arrayExcludeDays: excludesDays,         //  массив дат "исключений"
+                editable: true,                         //  режим "изменяемый", по умолчанию "true"
+                nopast: true,                           //  режим "нет прошлого", по умолчанию "false"
+                onRangeSelect: eventRangeSelect         //  обработчик события выделения ячейки
+            }),
+
+            undefined;
+
+            taplendar.loadRange('clear', ['14.11.2012', '20.11.2012']);
+    </script>
+</html>
