@@ -129,6 +129,17 @@ function varType(variable) {
         return (typeof variable);
 }
 
+function valueValidate(index) {
+    switch (varType(index)) {
+        case 'number':
+            return index;
+        case 'string':
+            return index.convert().toId();
+        case 'date':
+            return index.toId();
+    }
+}
+
 //	Расширение прототиповв
 
 //	Расширение прототипа массивов, так как для IE типовой indexOf работает только для версии 9 и выше
@@ -367,7 +378,7 @@ function Cell(config) {
         onRender: function(container, cellDate, scopeDate) {},
         onCellClick: function(cell, mouseEvent) {},
         onCellMouseMove: function(cell, mouseEvent) {}
-    }
+    };
 
     this.initialize = function(config) {
         this.config = extend(this.config, this.defaults);
@@ -377,24 +388,24 @@ function Cell(config) {
             throw ('cellDate "' + this.config.cellDate + '" неверного формата');
         if (!this.config.scopeDate || !this.config.scopeDate instanceof Date)
             throw ('scopeDate "' + this.config.scopeDate + '" неверного формата');
-    }
+    };
 
     this.setData = function(key, value) {
         this.config.calendarInstance.setData(key, value);
         return this;
-    }
+    };
 
     this.getData = function(key) {
         return this.config.calendarInstance.getData(key);
-    }
+    };
 
     this.getDate = function() {
         return this.config.cellDate;
-    }
+    };
 
     this.getScopeDate = function() {
         return this.config.scopeDate;
-    }
+    };
 
     this.getAttributes = function() {
         var
@@ -408,7 +419,7 @@ function Cell(config) {
         this.past = (currentDate.getTime() > this.value.getTime());
         this.id = (this.inScope) ? this.value.toId() : 0;
         this.uniqueId = this.config.calendarInstance.cellUnique + this.id;
-    }
+    };
 
     this.getClassName = function() {
         var
@@ -421,13 +432,18 @@ function Cell(config) {
             className += 'current ';
         if (this.past)
             className += 'past ';
+        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
+            var temp = this.value.toId();
+            if ((temp >= this.config.calendarInstance.startEnabledRange) && (temp <= this.config.calendarInstance.stopEnabledRange))
+                className += 'locked ';
+        }
         if (this.mode == 'include' || this.mode == 'exclude')
             className += this.mode;
         return className.trim();
-    }
+    };
 
     this.generateUniqueId = function() {
-    }
+    };
 
     this.render = function() {
         var
@@ -458,7 +474,7 @@ function Cell(config) {
                 this.config.onRender.apply(this, [container, this.getDate(), this.getScopeDate()]);
             return container;
         }
-    }
+    };
 
     this.initialize(config);
     this.getAttributes();
@@ -468,8 +484,8 @@ function Cell(config) {
 }
 
 function Calendar(config) {
-    this.config = {}
-    this.data = {}
+    this.config = {};
+    this.data = {};
 
     this.cellUnique = '';
 
@@ -477,13 +493,16 @@ function Calendar(config) {
     this.minCell = undefined;
     this.maxCell = undefined;
 
-    this.operation = undefined
-    this.mode = undefined
+    this.operation = undefined;
+    this.mode = undefined;
 
-    this.startCell = undefined
-    this.stopCell = undefined
-    this.includesArray = []
-    this.excludesArray = []
+    this.startCell = undefined;
+    this.stopCell = undefined;
+    this.includesArray = [];
+    this.excludesArray = [];
+
+    this.startEnabledRange = undefined;
+    this.stopEnabledRange = undefined;
 
     this.defaults = {
         container: undefined,
@@ -509,7 +528,7 @@ function Calendar(config) {
         onRangeExistsRequest: function() {},
         onRangeSelect: function(mode, startId, stopId, isOverwrite) {},
         onInitialize: function() {}
-    }
+    };
 
     this.convertStringDates = function() {
         if (this.config.arrayDisabledDays)
@@ -521,7 +540,7 @@ function Calendar(config) {
             this.config.startDate = this.config.startDate.convert();
         if (this.config.currentDate && typeof this.config.currentDate == 'string')
             this.config.currentDate = this.config.currentDate.convert();
-    }
+    };
 
     this.initialize = function(config) {
         this.config = extend(this.config, this.defaults);
@@ -539,9 +558,9 @@ function Calendar(config) {
             throw ('startDate "' + this.config.startDate + '" неверного формата');
 
         this.cellUnique = (this.config.cellUnique == undefined) ? randomString(5) : this.config.cellUnique;
-       
+
         return this;
-    }
+    };
 
     this.render = function() {
         var container = this.config.container;
@@ -562,84 +581,84 @@ function Calendar(config) {
         table.appendChild(tr);
         table.setAttribute('class', 'jsc-calendar-wrapper');
         container.appendChild(table);
-    }
+    };
 
     this.prior = function() {
         this.date.setMonth(this.date.getMonth() - this.config.alpha);
         this.render();
         return false;
-    }
+    };
 
     this.next = function() {
         this.date.setMonth(this.date.getMonth() + this.config.alpha);
         this.render();
         return false;
-    }
+    };
 
     this.getMonthNames = function(index) {
         return monthNames[this.config['languageIndex']][index];
-    }
+    };
 
     this.getDayNames = function(index) {
         return dayNames[this.config['languageIndex']][index];
-    }
+    };
 
     this.setData = function(key, value) {
         this.data[key] = value;
         return this;
-    }
+    };
 
     this.getData = function(key) {
         return this.data[key];
-    }
+    };
 
     this.getStartDate = function() {
         if (!this.date) {
             this.date = this.config.startDate || new Date()
         }
         return this.date;
-    }
+    };
 
     this.setDate = function(date) {
         if (typeof date == 'string')
             this.date = date.convert();
         else
             this.date = date;
-    }
+    };
 
     this.setStartDate = function(startDate) {
         if (typeof startDate == 'string')
             this.config.startDate = startDate.convert();
         else
             this.config.startDate = startDate;
-    }
+    };
 
     this.getLanguageIndex = function() {
         return this.config['languageIndex'];
-    }
+    };
 
     this.getFirstDayOfWeek = function() {
         return firstDaysOfWeek[this.getLanguageIndex()];
-    }
+    };
 
     this.getCurrentDate = function() {
         return (this.config.currentDate == undefined) ? new Date().truncate() : this.config.currentDate;
-    }
+    };
 
     this.setCurrentDate = function(currentDate) {
         if (typeof currentDate == 'string')
             this.config.currentDate = currentDate.convert();
         else
             this.config.currentDate = currentDate;
-    }
+    };
 
     this.getArrayDisabledDays = function() {
         return (this.config.arrayDisabledDays == undefined) ? [] : this.config.arrayDisabledDays;
-    }
+    };
 
     this.getArrayDisabledWeekDays = function() {
         return (this.config.arrayDisabledWeekDays == undefined) ? [] : this.config.arrayDisabledWeekDays;
-    }
+    };
 
     this.getNewCell = function(cellDate, scopeDate) {
         return new Cell({
@@ -650,11 +669,11 @@ function Calendar(config) {
             onCellClick: this.config.onCellClick,
             onCellMouseMove: this.config.onCellMouseMove
         });
-    }
+    };
 
     this.inScope = function(date, scopeDate) {
         return date.getMonth() == scopeDate.getMonth();
-    }
+    };
 
     this.getMonthMatrix = function(startDate) {
         var
@@ -695,7 +714,7 @@ function Calendar(config) {
             }
         }
         return month;
-    }
+    };
 
     this.renderHead = function(date, showPrior, showNext) {
         showPrior = typeof showPrior == 'undefined' ? true : showPrior;
@@ -731,7 +750,7 @@ function Calendar(config) {
             optionItem = undefined;
         thMonth.innerHTML = this.getMonthNames(date.getMonth()) + ' ' + date.getFullYear();
         if (showPrior)
-            trFirst.appendChild(tdPrior);        
+            trFirst.appendChild(tdPrior);
         trFirst.appendChild(thMonth);
         if (showNext)
             trFirst.appendChild(tdNext);
@@ -743,7 +762,7 @@ function Calendar(config) {
         thead.appendChild(trFirst);
         thead.appendChild(trSecond);
         return thead;
-    }
+    };
 
     this.renderCalendar = function(date, showPrior, showNext) {
         var
@@ -772,40 +791,40 @@ function Calendar(config) {
         }
         div.appendChild(table);
         return div;
-    }
+    };
 
     this.visible = function()
     {
         return (this.config.container.style.display == 'none') ? false : true;
-    }
+    };
 
     this.show = function () {
         if (this.isDatepicker())
             this.setEvents();
         this.config.container.style.display = 'block';
-    }
+    };
 
     this.close = function() {
         this.config.container.style.display = 'none';
         if (this.config.inheritedClick)
             document.onclick = this.config.inheritedClick;
-    }
+    };
 
     this.toggleVisibility = function() {
         (this.visible()) ? this.close() : this.show();
-    }
+    };
 
     this.isDatepicker = function() {
         return (this.config.control) ? true : false;
-    }
+    };
 
     this.controlGetPosition = function() {
         return getPosition(this.config.control);
-    }
+    };
 
     this.controlGetStyle = function(property) {
         return getStyle(this.config.control, property);
-    }
+    };
 
     this.setEvents = function() {
         this.config.inheritedClick = document.onclick;
@@ -817,7 +836,7 @@ function Calendar(config) {
             if (self.visible() && outside(self.config.container, clickEvent) && outside(self.config.control, clickEvent))
                 self.close();
         }
-    }
+    };
 
     this.attachControl = function() {
         var
@@ -840,32 +859,20 @@ function Calendar(config) {
             self.render();
             self.toggleVisibility();
         }
-    }
+    };
 
     this.loadRange = function(mode, range) {
-        
-        function indexValidate(index) {
-            switch (varType(index)) {
-                case 'number':
-                    return index;
-                case 'string':
-                    return index.convert().toId();
-                case 'date':
-                    return index.toId();
-            }
-        }
-
         var
             startIndex = undefined,
             stopIndex = undefined;
 
-        if (range.length != 2) {
+        if (2 !== range.length) {
             console.error('Неверный размер массива (' + range.length + ')');
-            return;
+            return false;
         }
 
-        startIndex = indexValidate(range[0]);
-        stopIndex = indexValidate(range[1]);
+        startIndex = valueValidate(range[0]);
+        stopIndex = valueValidate(range[1]);
         if (stopIndex < startIndex) {
             var tempIndex = startIndex;
             startIndex = stopIndex;
@@ -879,21 +886,21 @@ function Calendar(config) {
             }
             this.setCellMode(cell, mode);
         }
-    }
+    };
 
     this.loadRanges = function(mode, ranges) {
         var instance = this;
         ranges.forEach(function(range) {
             instance.loadRange(mode, range);
         });
-    }
+    };
 
     this.load = function() {
         if (config.arrayIncludeDays instanceof Array)
             this.loadRanges('include', config.arrayIncludeDays);
         if (config.arrayExcludeDays instanceof Array)
             this.loadRanges('exclude', config.arrayExcludeDays);
-    }
+    };
 
     //  Выделение в реальном режиме (класс "temp")
     this.tempSelect = function(cell) {
@@ -908,7 +915,7 @@ function Calendar(config) {
             if (element != undefined)
                 addClass(element, (hasClass(element, this.mode)) ? 'reselect' : 'temp');
         }
-    }
+    };
 
     //  Очистка временного выделения
     this.tempClear = function() {
@@ -916,7 +923,7 @@ function Calendar(config) {
             removeClass($(this.cellUnique + i), 'reselect');
             removeClass($(this.cellUnique + i), 'temp');
         }
-    }
+    };
 
     this.rangeValidate = function() {
         if (this.startCell.id > this.stopCell.id) {
@@ -924,7 +931,7 @@ function Calendar(config) {
             this.startCell = this.stopCell;
             this.stopCell = tempCell;
         }
-    }
+    };
 
     this.setCellMode = function(cell, mode) {
         switch (mode) {
@@ -954,7 +961,7 @@ function Calendar(config) {
             default:
                 return false;
         }
-    }
+    };
 
     this.setRange = function() {
         var
@@ -968,7 +975,7 @@ function Calendar(config) {
             case 'exclude':
                 for (var i = this.startCell.id; i <= this.stopCell.id; i++) {
                     if (this.cellsArray[i].mode == this.mode) {
-                        if (tempReselectMode == rmRequest) {
+                        if (tempReselectMode == rmRequest) {м
                             switch (this.mode) {
                                 case 'include':
                                     if (this.config.onRangeExistsRequest instanceof Function)
@@ -995,16 +1002,16 @@ function Calendar(config) {
         this.validate();
         if (this.config.onRangeSelect instanceof Function)
             this.config.onRangeSelect.apply(this, [this.mode, this.startCell.id, this.stopCell.id, isOverwrite]);
-    }
+    };
 
     this.setMode = function(mode) {
         this.mode = mode;
         return this.mode;
-    }
+    };
 
     this.getMode = function() {
         return this.mode;
-    }
+    };
 
     this.appendRange = function(mode) {
         switch (mode) {
@@ -1019,7 +1026,7 @@ function Calendar(config) {
             default:
                 return false;
         }
-    }
+    };
 
     this.clearRange = function(mode) {
         switch (mode) {
@@ -1032,7 +1039,7 @@ function Calendar(config) {
             default:
                 return;
         }
-    }
+    };
 
     this.clear = function(refresh) {
         refresh = (refresh == undefined) ? false : refresh;
@@ -1041,7 +1048,7 @@ function Calendar(config) {
         this.cellsArray = [];
         if (refresh)
             this.render();
-    }
+    };
 
     this.pushItem = function(mode, index, item) {
         var
@@ -1066,7 +1073,7 @@ function Calendar(config) {
                 default:
                     return false;
             }
-    }
+    };
 
     this.removeItem = function(item) {
         this.includesArray.forEach(function(array) {
@@ -1075,7 +1082,7 @@ function Calendar(config) {
         this.excludesArray.forEach(function(array) {
             array.remove(item);
         });
-    }
+    };
 
     this.truncate = function() {
         var
@@ -1089,7 +1096,7 @@ function Calendar(config) {
             if (array.length == 0)
                 excludes.remove(array);
         });
-    }
+    };
 
     this.validate = function() {
         var
@@ -1125,7 +1132,7 @@ function Calendar(config) {
             excludes[excludes.length] = tempExcludes;
         this.includesArray = includes;
         this.excludesArray = excludes;
-    }
+    };
 
     this.includes = function(format) {
         var
@@ -1145,9 +1152,8 @@ function Calendar(config) {
             result[index] = temp;
         });
 
-        console.log(result);
         return result;
-    }
+    };
 
     this.excludes = function(format) {
         var
@@ -1166,10 +1172,22 @@ function Calendar(config) {
             temp = [startValue, stopValue];
             result[index] = temp;
         });
-
-        console.log(result);
         return result;
-    }
+    };
+
+    this.setEnabledRange = function(startValue, stopValue, needRefresh) {
+        this.startEnabledRange = valueValidate(startValue);
+        this.stopEnabledRange = valueValidate(stopValue);
+        if (false !== needRefresh)
+            this.render();
+    };
+
+    this.clearEnabledRange = function(needRefresh) {
+        this.startEnabledRange = undefined;
+        this.stopEnabledRange = undefined;
+        if (false !== needRefresh)
+            this.render();
+    };
 
     this.initialize(config);
     if (config.taplendar)
@@ -1182,7 +1200,7 @@ function Calendar(config) {
         this.attachControl();
     else
         this.show();
-    
+
     return this;
 }
 
