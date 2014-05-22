@@ -434,7 +434,7 @@ function Cell(config) {
             className += 'past ';
         if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
             var temp = this.value.toId();
-            if ((temp >= this.config.calendarInstance.startEnabledRange) && (temp <= this.config.calendarInstance.stopEnabledRange))
+            if ((temp < this.config.calendarInstance.startEnabledRange) || (temp > this.config.calendarInstance.stopEnabledRange))
                 className += 'locked ';
         }
         if (this.mode == 'include' || this.mode == 'exclude')
