@@ -28,10 +28,6 @@ function debug(target) {
 
 //	Функции из PrototypeJs (чтобы не тащить 170 кБ), самописные и откуда-то взятые
 
-function $(id) {
-    return document.getElementById(id);
-}
-
 function extend(destination, source) {
     for (var property in source) {
         destination[property] = source[property];
@@ -381,9 +377,7 @@ function Cell(config) {
     };
 
     this.initialize = function(config) {
-        this.config = extend(this.config, this.defaults);
-        if (config)
-            this.config = extend(this.config, config);
+        this.config = extend(this.defaults, config);
         if (!this.config.cellDate || !this.config.cellDate instanceof Date)
             throw ('cellDate "' + this.config.cellDate + '" неверного формата');
         if (!this.config.scopeDate || !this.config.scopeDate instanceof Date)
@@ -424,6 +418,14 @@ function Cell(config) {
     this.getClassName = function() {
         var
             className = '';
+        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
+            var temp = this.value.toId();
+            this.inEnabledRange = ((temp >= this.config.calendarInstance.startEnabledRange) && (temp <= this.config.calendarInstance.stopEnabledRange));
+        }
+        if (this.inEnabledRange)
+            ;// console.log(this.value);
+        else
+            className += 'locked ';
         if (this.inScope)
             className += 'scope ';
         if (this.locked)
@@ -432,11 +434,6 @@ function Cell(config) {
             className += 'current ';
         if (this.past)
             className += 'past ';
-        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
-            var temp = this.value.toId();
-            if ((temp < this.config.calendarInstance.startEnabledRange) || (temp > this.config.calendarInstance.stopEnabledRange))
-                className += 'locked ';
-        }
         if (this.mode == 'include' || this.mode == 'exclude')
             className += this.mode;
         return className.trim();
@@ -543,22 +540,15 @@ function Calendar(config) {
     };
 
     this.initialize = function(config) {
-        this.config = extend(this.config, this.defaults);
-        if (config) {
-            if (config['data']) {
-                this.data = extend(this.data, config['data']);
-                delete config['data'];
-            }
-            this.config = extend(this.config, config);
-        }
+        this.config = extend(this.defaults, config);
+        if (this.config.container instanceof $)
+            this.config.container = this.config.container[0];
         this.convertStringDates();
         if (this.config.startDate && this.config.startDate instanceof Date)
             this.config.startDate.setDate(1);
         else
             throw ('startDate "' + this.config.startDate + '" неверного формата');
-
         this.cellUnique = (this.config.cellUnique == undefined) ? randomString(5) : this.config.cellUnique;
-
         return this;
     };
 
@@ -799,6 +789,7 @@ function Calendar(config) {
     };
 
     this.show = function () {
+        return false;
         if (this.isDatepicker())
             this.setEvents();
         this.config.container.style.display = 'block';
@@ -911,7 +902,7 @@ function Calendar(config) {
         this.tempClear();
         //  Выделение "temp"
         for (var i = startIndex; i <= stopIndex; i++) {
-            element = $(this.cellUnique + i);
+            element = document.getElementById(this.cellUnique + i);
             if (element != undefined)
                 addClass(element, (hasClass(element, this.mode)) ? 'reselect' : 'temp');
         }
@@ -920,8 +911,8 @@ function Calendar(config) {
     //  Очистка временного выделения
     this.tempClear = function() {
         for (var i = this.minCell.id; i <= this.maxCell.id; i++) {
-            removeClass($(this.cellUnique + i), 'reselect');
-            removeClass($(this.cellUnique + i), 'temp');
+            removeClass(document.getElementById(this.cellUnique + i), 'reselect');
+            removeClass(document.getElementById(this.cellUnique + i), 'temp');
         }
     };
 
@@ -975,7 +966,7 @@ function Calendar(config) {
             case 'exclude':
                 for (var i = this.startCell.id; i <= this.stopCell.id; i++) {
                     if (this.cellsArray[i].mode == this.mode) {
-                        if (tempReselectMode == rmRequest) {м
+                        if (tempReselectMode == rmRequest) {
                             switch (this.mode) {
                                 case 'include':
                                     if (this.config.onRangeExistsRequest instanceof Function)
@@ -1236,6 +1227,10 @@ function Taplendar(config) {
     config.onCellClick = function(cell, mouseEvent) {
         var
             granted = false;
+        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) || ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange))
+            if (!cell.inEnabledRange)
+                return;
+
         switch (cell.config.calendarInstance.mode) {
             case 'clear':
                 granted = (cell.inScope && cell.mode != undefined && cell.config.calendarInstance.config.editable && !(this.config.calendarInstance.config.nopast && cell.past));
