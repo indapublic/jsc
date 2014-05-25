@@ -28,6 +28,10 @@ function debug(target) {
 
 //	Функции из PrototypeJs (чтобы не тащить 170 кБ), самописные и откуда-то взятые
 
+function byId(selector) {
+    return document.getElementById(selector);
+}
+
 function extend(destination, source) {
     for (var property in source) {
         destination[property] = source[property];
@@ -418,14 +422,14 @@ function Cell(config) {
     this.getClassName = function() {
         var
             className = '';
+        this.inEnabledRange = true;
         if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
             var temp = this.value.toId();
-            this.inEnabledRange = ((temp >= this.config.calendarInstance.startEnabledRange) && (temp <= this.config.calendarInstance.stopEnabledRange));
+            if ((temp < this.config.calendarInstance.startEnabledRange) || (temp > this.config.calendarInstance.stopEnabledRange))
+                this.inEnabledRange = false;
         }
-        if (this.inEnabledRange)
-            ;// console.log(this.value);
-        else
-            className += 'locked ';
+        if (!this.inEnabledRange)
+            this.locked = true;
         if (this.inScope)
             className += 'scope ';
         if (this.locked)
