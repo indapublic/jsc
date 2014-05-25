@@ -737,7 +737,7 @@ function Calendar(config) {
             tdNext.setAttribute('id', this.cellUnique + 'Next');
         }
         thMonth.setAttribute('class', 'month-name');
-        thMonth.setAttribute('colspan', '5');
+        thMonth.setAttribute('colspan', '7');
         var
             comboMonth = document.createElement('span'),
             comboYear = document.createElement('span'),
