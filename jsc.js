@@ -1227,8 +1227,10 @@ function Datepicker(config) {
 }
 
 function Taplendar(config) {
-
+    userCellClick = config.onCellClick;
     config.onCellClick = function(cell, mouseEvent) {
+        if (userCellClick != undefined)
+            userCellClick(cell, mouseEvent);
         var
             granted = false;
         if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) || ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange))
