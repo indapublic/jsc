@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>JavaScript Calendar, Datepicker and Taplendar</title>
+        <link rel="stylesheet" type="text/css" href="jsc.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="jsc.min.js"></script>
+    </head>
+    <body>
+        <p><div id="ex_prices_taplendar" class="jsc-calendar-container"></div></p>
+    </body>
+
+    <script type="text/javascript">
+        // Дальше функции для таплендаря
+        function eventTaplendar_ex_include_CellClick(cell, mouseEvent, operation) { // Здесь мы не даем выделения нескольких диапазонов дат
+            alert('!');
+            console.log("TaplendarCellClick" +
+                    "\ncell: " + cell +
+                    "\nmouseEvent: " + mouseEvent +
+                    "\noperation: " + operation
+                    );
+            if (operation == 'select' && first != undefined && last != undefined) {
+        //        taplendar_prices.clear('true');
+                taplendar_prices.clearEnabledRange('true');
+                taplendar_prices.loadRanges('include', incl_days_prices);
+                taplendar_prices.loadRanges('exclude', excl_days_prices);
+            }
+        }
+
+        function eventRequest() { // Здесь ругаемся на то, что залезли в уже добавленные диапазоны
+            //    return (confirm(langj.sure_to_replace_ex_dates)) ? rmReplace : rmDenied;
+            alert(langj.cant_replace_date);
+            return rmDenied;
+        }
+
+        function event_ex_iclude_RangeSelect(mode, startId, stopId, isOverwrite) { // Здесь обрабатываем конечный клик на ячейку (завершение выделения)
+            console.log("RangeSelect" +
+                    "\nmode: " + mode +
+                    "\nstartId: " + startId +
+                    "\nstopId: " + stopId +
+                    "\nisOverwrite: " + isOverwrite
+                    );
+            if (mode == 'include') {
+                first = startId;
+                last = stopId;
+            }
+        //    $('#ex_modal_selected_prices_from_id').val(startId);
+        //    $('#ex_modal_selected_prices_till_id').val(stopId);
+            // $('#ex_modal_selected_prices_from_id').val(format_date_from_long_format_to_mysql(startId.fromId()));
+            // $('#ex_modal_selected_prices_till_id').val(format_date_from_long_format_to_mysql(stopId.fromId()));
+        //    $('#ex_modal_ranges_span').html(langj.you_picked_dates + ': <b>' + format_date_from_long_format_to_full(startId.fromId()) + ' - ' + format_date_from_long_format_to_full(stopId.fromId()) + '</b>');
+        }
+
+        function currentDate() { // Функция отображает текущую дату в формате дд.мм.гггг
+            var dt = new Date();
+            return ((dt.getDate() < 10) ? ('0' + dt.getDate()) : (dt.getDate())) + '.' + ((dt.getMonth() + 1) < 10 ? ('0' + (dt.getMonth() + 1)) : (dt.getMonth() + 1)) + '.' + dt.getFullYear();
+        }
+
+        var days = '0110000';
+        var incl_days_prices = [];
+        var excl_days_prices = [];
+        var
+            first = undefined,
+            last = undefined,
+            taplendar_prices = undefined;
+
+        // Язык календаря
+        var tap_lang = liENG;
+        tap_lang = liRUS;
+
+        taplendar_prices = new Taplendar({
+            container: $('#ex_prices_taplendar'), //  контейнер
+            currentDate: currentDate(), //  текущая дата (выделяется цветом, может быть не задана)
+            startDate: currentDate(), //  дата показа (отсчет с первого числа месяца, не может быть не задана)
+            arrayDisabledWeekDays: '0000000', //  массив заблокированных дней недели
+            //                arrayDisabledDays: dataDisabledDays,    //  массив заблокированных дат
+            arrayGrantedWeekDays: days,
+            languageIndex: tap_lang, //  язык интерфейса
+            count: 3, //  количество месяцев для показа
+            alpha: 1, //  количество месяцев для переходов
+            showPrior: false, //  признак "показывать перелистывание назад"
+            showNext: false, //  признак "показывать перелистывание вперед"
+            mode: 'include', //  начальный режим
+            reselectMode: rmRequest, //  режим замены областей
+            onRangeExistsRequest: eventRequest, //  обработчик на совмещение диапазонов
+            arrayIncludeDays: incl_days_prices, //  массив дат "включений"
+            arrayExcludeDays: excl_days_prices, //  массив дат "исключений"
+            editable: true, //  режим "изменяемый", по умолчанию "true"
+            nopast: true, //  режим "нет прошлого", по умолчанию "false"
+            onRangeSelect: event_ex_iclude_RangeSelect, //  обработчик события выделения ячейки
+            onCellClick: eventTaplendar_ex_include_CellClick    //  обработчик клика
+        }),
+        undefined;
+
+        var df = new Date('Jun 11 2014');
+        var dt = new Date('Thu Jun 12 2014');
+
+        taplendar_prices.setEnabledRange(df.toId(), dt.toId());
+    </script>
+</html>
