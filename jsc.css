@@ -1,5 +1,39 @@
+/* Ð‘Ð»Ð¾Ðº ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ñ Ð²Ð¼ÐµÑÑ‚Ðµ Ñ ÐºÐ½Ð¾Ð¿ÐºÐ°Ð¼Ð¸ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð¼ÐµÑÑÑ†ÐµÐ² */
+.jsc-block {
+    padding: 30px 0px 30px 0px;
+}
+
+/* Ð—Ð°Ð´Ð°ÐµÐ¼ ÑˆÐ¸Ñ€Ð¸Ð½Ñƒ Ð±Ð»Ð¾ÐºÐ° Ð¼ÐµÑÑÑ†Ð° */
+.jsc-month {
+    width: 260px;
+    text-align: center;
+
+}
+.tapl-cont .jsc-month {
+    width: 320px;
+    text-align: center;
+}
+
+/* ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð¼ÐµÑÑÑ†ÐµÐ² */
+.tap-change {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/* Ð‘Ð»Ð¾Ðº ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ð½Ð¾Ð¹ ÑÐµÑ‚ÐºÐ¸ */
+.jsc-calendar-wrapper {
+    float: left;
+}
+
+/* Ð“Ð»Ð°Ð²Ð½Ñ‹Ð¹ ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€ ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ñ */
 table.jsc-calendar {
-    margin: 0 5px;
+    margin: 0px 0px 0px 0px;
     cursor: default;
     border-collapse: collapse;
     -webkit-touch-callout: none;
@@ -11,84 +45,170 @@ table.jsc-calendar {
     user-select: none;
 }
 
-table.jsc-calendar tbody td, table.jsc-calendar thead th {
-    margin: 0;
-    padding: 0;
-    width: 22px;
-    height: 16px;
+/* TD - Ñ‡Ð¸ÑÐ»Ð° */
+table.jsc-calendar tbody td {
+    height: 25px;
     text-align: center;
-    color: #999;
+    vertical-align: middle;
+    border: 1px solid #DDD;
+    /*font-weight: normal;*/
+    font-size: 13px;
+    width: 34px;
+    color: #fff;
+}
+.tapl-cont table.jsc-calendar tbody td {
+    height: 35px;
+    width: 40px;
 }
 
-/*  текущий месяц   */
+/* TH - Ð´Ð½Ð¸ Ð½ÐµÐ´ÐµÐ»Ð¸ Ð¸ Ð¼ÐµÑÑÑ†Ð°*/
+table.jsc-calendar thead th {
+    height: 25px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #DDD;
+    /*font-weight: normal;*/
+    font-size: 13px;
+    background-color: #fff;
+    cursor: default;
+}
+.tapl-cont table.jsc-calendar thead th {
+    height: 35px;
+}
+
+/* Ð”Ð°Ñ‚Ñ‹ Ð² Ð½Ð°ÑÑ‚Ð¾ÑÑ‰Ð¸Ñ… Ð¸ Ð±ÑƒÐ´ÑƒÑ‰Ð¸Ñ… Ð¼ÐµÑÑÑ†Ð°Ñ… */
 table.jsc-calendar tbody td.scope {
-    color: #000;
+    color: #333;
+}
+table.jsc-calendar tbody td.scope:hover{
+    background-color:#209be4;
+    color: #fff;
+    cursor: pointer;
+}
+table.jsc-calendar tbody td.scope.granted.include:hover{
+    background-color:#209be4;
+    color: #fff;
+    cursor: pointer;
 }
 
-/*  заблокированный  */
-table.jsc-calendar tbody td.locked {
-    color: red;
+/*  Ð—Ð°Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð°Ñ Ð´Ð°Ñ‚Ð° */
+table.jsc-calendar tbody td.scope.locked {
+    color: #fff;
+    background-image: url("../ico/lock.png");
+    background-repeat: no-repeat;
+    background-position: 8px 6px;
+    background-color: #ec7777;
+    font-size: 1px;
+}
+table.jsc-calendar tbody td.scope.locked:hover {
+    color: #fff;
+    background-image: url("../ico/lock.png");
+    background-repeat: no-repeat;
+    background-position: 8px 6px;
+    background-color:#209be4;
+    font-size: 1px;
+}
+.tapl-cont table.jsc-calendar tbody td.scope.locked {
+    background-position: 14px 9px;
 }
 
-/*  прошедшая дата */
+/* Ð’Ñ‹Ð´ÐµÐ»ÑÐµÐ¼ Ð´Ð½Ð¸ Ð½ÐµÐ´ÐµÐ»Ð¸ */
+table.jsc-calendar tbody td.scope.granted {
+    color: #333;
+    background-color: #6EC76E;
+}
+
+/*  Ð¡ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð´Ð½Ð¸ Ð² Ð¿Ñ€Ð¾ÑˆÐµÐ´ÑˆÐ¸Ñ… Ð´Ð°Ñ‚Ð°Ñ… Ð² Ð½Ð°Ñ‡Ð°Ð»Ðµ Ð¸ ÐºÐ¾Ð½Ñ†Ðµ Ð¼ÐµÑÑÑ†Ð° */
 table.jsc-calendar tbody td.past {
-    color: #eee;
+    color: #fff;
+    background-color: #fff;
+}
+table.jsc-calendar tbody td.past:hover {
+    cursor: default;
+    background-color: #fff;
+    color: #fff;
 }
 
-table.jsc-calendar tbody td.past.locked {
+/* ÐŸÑ€Ð¾ÑˆÐµÐ´ÑˆÐ¸Ðµ Ð´Ð°Ñ‚Ñ‹ */
+table.jsc-calendar tbody td.past.scope {
+    color: #ddd;
+    background-color: #fff;
+}
+
+
+/* Ð—Ð°Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð°Ñ Ð´Ð°Ñ‚Ð° Ð½Ð° Ð¿Ñ€Ð¾ÑˆÐµÐ´ÑˆÐ¸Ñ… Ð´Ð½ÑÑ… */
+table.jsc-calendar tbody td.past.scope.locked {
+    color: #ddd;
+    background-image: url("../ico/lock.png");
+    background-repeat: no-repeat;
+    background-position: 8px 6px;
+    background-color:#eee;
+    font-size: 1px;
+}
+table.jsc-calendar tbody td.past.scope.locked:hover {
+    color: #ddd;
+    background-image: url("../ico/lock.png");
+    background-repeat: no-repeat;
+    background-position: 8px 6px;
+    background-color:#eee;
+    font-size: 1px;
+}
+.tapl-cont table.jsc-calendar tbody td.past.scope.locked {
+    background-position: 14px 9px;
+}
+
+/*  Ñ‚ÐµÐºÑƒÑ‰Ð°Ñ Ð´Ð°Ñ‚Ð°  */
+table.jsc-calendar tbody td.current {
     color: green;
 }
 
-/*  текущая дата  */
-table.jsc-calendar tbody td.current {
-    color: pink;
-}
-
-/*  выделения цветом    */
+/*  Ð²Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¸Ñ Ñ†Ð²ÐµÑ‚Ð¾Ð¼    */
 table.jsc-calendar tbody td.include {
     background-color: #6EC76E;
 }
-table.jsc-calendar tbody td.exclude {
+table.jsc-calendar tbody td.scope.granted.exclude {
     background-color: #EC7777;
 }
-/*  обязательно последними temp и reselect  */
-table.jsc-calendar tbody td.temp {
-    background-color: yellow;
+table.jsc-calendar tbody td.scope.exclude {
+    background-color: #EC7777;
 }
-table.jsc-calendar tbody td.reselect {
-    background-color: purple;
+table.jsc-calendar tbody td.scope.exclude:hover {
+    color: #333;
+    background-color: #EC7777;
 }
 
-/*  дни недели   */
+/*  Ð¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¼Ð¸ temp Ð¸ reselect  */
+/* Ð’Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð´Ð°Ñ‚ */
+table.jsc-calendar tbody td.temp {
+    background-color: #FFF691;
+}
+table.jsc-calendar tbody td.scope.granted.temp {
+    background-color: #FFF691;
+}
+/* Ð¥Ð¾Ð²ÐµÑ€ Ð½Ð° Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð½ÑƒÑŽ Ð´Ð°Ñ‚Ñƒ */
+/* table.jsc-calendar tbody td.temp.locked {
+    background-color: #ddcf32;
+} */
+
+/* ÐŸÐµÑ€ÐµÐ²Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð´Ð°Ñ‚ */
+table.jsc-calendar tbody td.reselect {
+    background-color: #1f7f3a;
+}
+
+/*  Ð´Ð½Ð¸ Ð½ÐµÐ´ÐµÐ»Ð¸   */
 table.jsc-calendar thead th {
     font-weight: normal;
     border-bottom: 1px solid #ccc;
     color: #333;
 }
 
+/* Ð¼ÐµÑÑÑ† */
 table.jsc-calendar thead th.month-name {
     border-bottom: none;
+    color: #333;
 }
 
-table.jsc-calendar .calendar-btn span {
-    text-indent: -1000px;
-    overflow: hidden;
-    display: block;
-    cursor: pointer;
-}
-
-table.jsc-calendar .btn-prior span {
-    background: url('prior.png') 50% 50% no-repeat;
-}
-
-table.jsc-calendar .btn-next span {
-    background: url('next.png') 50% 50% no-repeat;
-}
-
-table.jsc-calendar .month-name {
-    text-align: center;
-}
-
+/* Ñ…Ð· */
 .jsc-calendar-white {
     border:1px solid #ccc;
     background: #fff;
@@ -96,13 +216,122 @@ table.jsc-calendar .month-name {
 }
 
 #jsc-calendar-container {
-    margin-top:10px;
-    float:left;
+
 }
 
 div.jsc-datepicker-container {
-    display: none;
+
+}
+
+/* Ð”Ð°Ð»ÑŒÑˆÐµ Ð¿Ð¾ÑˆÐµÐ» css Ð´Ð»Ñ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ð³Ð¾ ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ñ Ñ Ñ†ÐµÐ½Ð°Ð¼Ð¸ */
+.full-size .jsc-month {
+    width: 800px;
+}
+.full-size table.jsc-calendar thead th.month-name {
+    border-bottom: none;
+    /*    color: #333;
+        border-left: none;
+        border-right: none;*/
+    font-size: 14px;
+    background-color: #fafafa;
+}
+.full-size .calendar-btn.btn-next span {
+    margin-left: -42px;
+
+}
+.full-size table.jsc-calendar tbody td {
+    height: 40px;
+    text-align: left;
+    vertical-align: top;
+    padding: 4px 3px 3px 7px;
+    border: 1px solid #DDD;
+    /* font-weight: normal; */
+    font-size: 11px;
+    width: 114px;
+    /*color: #fff;*/
+}
+.full-size table.jsc-calendar tbody td.scope.granted {
+    /*color: #000;*/
+    /*background-color: #E7FFE7;*/
+    background-color: #F5FFF5;
+}
+.full-size table.jsc-calendar tbody td.scope.granted.past {
+    /*color: #000;*/
+    /*background-color: #E7FFE7;*/
+    background-color: #fafafa;
+}
+.tap-next {
+    float: right;
+    font-size: 12px;
     position: absolute;
-    border: 1px solid #444;
-    background-color: white;
+    top: 0px;
+    right: 180px;
+    cursor: pointer;
+    width: 60px;
+    height: 26px;
+    line-height: 26px;
+    padding-top: 5px;
+    text-align: center;
+    /* border-left: 1px solid #ccc; */
+    color: #333;
+    background-color: #eee;
+    border-bottom: 1px solid #E2E2E2;
+    border-top: 1px solid #E2E2E2;
+    border-left: 1px solid #E2E2E2;
+}
+.tap-prev {
+    float: right;
+    font-size: 12px;
+    position: absolute;
+    top: 0px;
+    left: 1px;
+    cursor: pointer;
+    width: 60px;
+    height: 26px;
+    line-height: 26px;
+    padding-top: 5px;
+    text-align: center;
+    /* border-left: 1px solid #ccc; */
+    color: #333;
+    background-color: #eee;
+    border-bottom: 1px solid #E2E2E2;
+    border-top: 1px solid #E2E2E2;
+    border-right: 1px solid #E2E2E2;
+}
+.tap-next:hover, .tap-prev:hover {
+    background-color: #e0e0e0;
+}
+.full-size table.jsc-calendar tbody td.past {
+    /*color: #fff;*/
+    background-color: #fff;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container {
+    float: right;
+    font-size: 14px;
+    text-align: right;
+    font-weight: 300;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container {
+    display: none;
+}
+.full-size table.jsc-calendar tbody td.granted .jsc-price-container {
+    display: block;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container .tap-currency {
+    font-size: 8px;
+    margin-right: 5px;
+}
+
+
+.full-size table.jsc-calendar tbody td .jsc-price-container .direct-sales {
+    color: #4b8df8;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container .online-sales {
+    color: #288A37;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container .agents-sales {
+    color: #8e44ad;
+}
+.full-size table.jsc-calendar tbody td .jsc-price-container .suppliers-sales {
+    color: #d84a38;
 }

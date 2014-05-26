@@ -5,7 +5,7 @@
         <title>JavaScript Calendar, Datepicker and Taplendar</title>
         <link rel="stylesheet" type="text/css" href="jsc.css" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script type="text/javascript" src="jsc.min.js"></script>
+        <script type="text/javascript" src="jsc.js"></script>
     </head>
     <body>
         <p><div id="ex_prices_taplendar" class="jsc-calendar-container"></div></p>
@@ -14,7 +14,6 @@
     <script type="text/javascript">
         // Дальше функции для таплендаря
         function eventTaplendar_ex_include_CellClick(cell, mouseEvent, operation) { // Здесь мы не даем выделения нескольких диапазонов дат
-            alert('!');
             console.log("TaplendarCellClick" +
                     "\ncell: " + cell +
                     "\nmouseEvent: " + mouseEvent +
@@ -30,7 +29,7 @@
 
         function eventRequest() { // Здесь ругаемся на то, что залезли в уже добавленные диапазоны
             //    return (confirm(langj.sure_to_replace_ex_dates)) ? rmReplace : rmDenied;
-            alert(langj.cant_replace_date);
+            // alert(langj.cant_replace_date);
             return rmDenied;
         }
 
@@ -57,7 +56,7 @@
             return ((dt.getDate() < 10) ? ('0' + dt.getDate()) : (dt.getDate())) + '.' + ((dt.getMonth() + 1) < 10 ? ('0' + (dt.getMonth() + 1)) : (dt.getMonth() + 1)) + '.' + dt.getFullYear();
         }
 
-        var days = '0110000';
+        var days = '1010101';
         var incl_days_prices = [];
         var excl_days_prices = [];
         var
@@ -93,8 +92,8 @@
         }),
         undefined;
 
-        var df = new Date('Jun 11 2014');
-        var dt = new Date('Thu Jun 12 2014');
+        var df = new Date('May 26 2014');
+        var dt = new Date('Thu Jun 15 2014');
 
         taplendar_prices.setEnabledRange(df.toId(), dt.toId());
     </script>

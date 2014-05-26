@@ -845,7 +845,7 @@ function Cell(config) {
             className = '';
 
         this.inEnabledRange = true;
-        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) && ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange)) {
+        if (this.config.calendarInstance.startEnabledRange || this.config.calendarInstance.stopEnabledRange) {
             var temp = this.value.toId();
             if ((temp < this.config.calendarInstance.startEnabledRange) || (temp > this.config.calendarInstance.stopEnabledRange))
                 this.inEnabledRange = false;
@@ -961,9 +961,9 @@ function Cell(config) {
 
 function Calendar(config) {
 
-    this.config = {}
+    this.config = {};
 
-    this.data = {}
+    this.data = {};
 
 
 
@@ -979,20 +979,22 @@ function Calendar(config) {
 
 
 
-    this.operation = undefined
+    this.operation = undefined;
 
-    this.mode = undefined
+    this.mode = undefined;
 
 
 
-    this.startCell = undefined
+    this.startCell = undefined;
 
-    this.stopCell = undefined
+    this.stopCell = undefined;
 
-    this.includesArray = []
+    this.includesArray = [];
 
-    this.excludesArray = []
+    this.excludesArray = [];
 
+    this.startEnabledRange = 'a';
+    this.stopEnabledRange = 'b';
 
 
     this.defaults = {
@@ -2397,8 +2399,8 @@ function Calendar(config) {
     };
 
     this.clearEnabledRange = function(needRefresh) {
-        this.startEnabledRange = undefined;
-        this.stopEnabledRange = undefined;
+        this.startEnabledRange = false;
+        this.stopEnabledRange = false;
         if (false !== needRefresh)
             this.render();
     };
@@ -2501,7 +2503,7 @@ function Taplendar(config) {
 
             granted = false;
 
-        if (('undefined' !== typeof this.config.calendarInstance.startEnabledRange) || ('undefined' !== typeof this.config.calendarInstance.stopEnabledRange))
+        if (this.config.calendarInstance.startEnabledRange || this.config.calendarInstance.stopEnabledRange)
             if (!cell.inEnabledRange)
                 return;
 
