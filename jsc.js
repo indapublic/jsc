@@ -1,20 +1,3 @@
-function debugMessage(message) {
-	document.write(message + '<br>');
-};
-function debugObject(object) {
-	debugMessage('<p>');
-	debugMessage('<strong>' + object + '</strong>');
-	for (var property in object)
-		debugMessage('<strong>[' + property + '</strong>] = ' + object[property]);
-	debugMessage('</p>');
-};
-function debug(target) {
-	if (typeof target == 'object')
-		debugObject(target);
-	else
-		debugMessage(target);
-	debugMessage(target);
-};
 //	Функции из PrototypeJs (чтобы не тащить 170 кБ), самописные и откуда-то взятые
 function byId(id) {
 	return document.getElementById(id);
