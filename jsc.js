@@ -182,9 +182,15 @@ function valueValidate(index) {
 	};
 	//  Преобразование даты в уникальное число (используется разница дней между искомой датой и 01.01.1900 00:00:00)
 	A.toId = function() {
-		var
-			firstDate = new Date(1900, 1, 1, 0, 0, 0, 0);
-		return parseInt(((this.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)));
+		var firstDate, firstTime, lastDate, lastTime;
+		firstDate = new Date(1900, 1, 1, 0, 0, 0, 0);
+		lastDate = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0, 0);
+		firstTime = firstDate.getTime();
+		lastTime = lastDate.getTime();
+		return parseInt((lastTime - firstTime) / (1000 * 60 * 60 * 24));
+		// var
+		// 	firstDate = new Date(1900, 1, 1, 0, 0, 0, 0);
+		// return parseInt(((this.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)));
 	};
 	//  Отсечение временной части
 	A.truncate = function() {
